@@ -40,7 +40,7 @@ def saveResults(info):
  	f.close()
 
 if __name__ == "__main__":
-	generation = 100
+	generation = 50
 	population = 200
 	test_step = 100
 	epoch = generation
@@ -69,11 +69,11 @@ if __name__ == "__main__":
 
 			saveResults(info)
 		
-		generation *= 1.06
+		generation *= 1.03
 		generation = int(generation)
 	
 	exp_id=0
-	generation = 100
+	generation = 45
 	for g in maps:
 		exp_id+=1
 		for i in range(1):
