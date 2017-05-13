@@ -52,25 +52,7 @@ if __name__ == "__main__":
 	
 	n=5
 
-	for g in maps:
-		for i in range(1):
-			exp_id+=1
-			randPlayer = False
-			info = id2info(exp_id)+"_deterministic_"+str(i+1)+"th_try"
-			st = setST(exp_id)
-
-			NEATresult = runNEAT.run(g, trails = test_step, randPlayer = randPlayer, generation = generation, 
-				population = population, nwin = 1)
-			runDQN = dqnt(g, randPlayer = randPlayer, test_num=test_step, epochs = generation, 
-				steps= population, fitThreshold = 1, stepThreshold = st)
-			DQNresult = runDQN.run()
-			NEATresult['exp_id'] = info
-			DQNresult['exp_id'] = info
-
-			nonRandResult.append((NEATresult, DQNresult))
-
-			saveResults(info)
-
+	
 	exp_id=0
 	for g in maps:
 		for i in range(1):
@@ -87,6 +69,25 @@ if __name__ == "__main__":
 			HPresult['exp_id'] = info
 			DQNresult['exp_id'] = info
 			randResult.append((HPresult, DQNresult))
+
+			saveResults(info)
+	
+	for g in maps:
+		for i in range(1):
+			exp_id+=1
+			randPlayer = False
+			info = id2info(exp_id)+"_deterministic_"+str(i+1)+"th_try"
+			st = setST(exp_id)
+
+			NEATresult = runNEAT.run(g, trails = test_step, randPlayer = randPlayer, generation = generation, 
+				population = population, nwin = 1)
+			runDQN = dqnt(g, randPlayer = randPlayer, test_num=test_step, epochs = generation, 
+				steps= population, fitThreshold = 1, stepThreshold = st)
+			DQNresult = runDQN.run()
+			NEATresult['exp_id'] = info
+			DQNresult['exp_id'] = info
+
+			nonRandResult.append((NEATresult, DQNresult))
 
 			saveResults(info)
 
