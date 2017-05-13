@@ -150,37 +150,59 @@ class dqnt(object):
         reward = self.tempGame.getReward()
         if self.epsilon > 0.1: #decrement epsilon over time
             self.epsilon -= (1/self.epochs)
+
         return (state, action, reward, new_state)
 
+    def trainDeter(self, load, epoch_num):
+        state, action, reward, new_state = load
+        old_qval = self.model.predict(state.reshape(1, self.inputSize))
+        new_qval = self.model.predict(new_state.reshape(1, self.inputSize))
+        maxQ = np.max(new_qval)
+        y = np.zeros((1,4))
+        y[:] = old_qval[:]
+        if reward == -1: #non-terminal state
+            update = (reward + (self.gamma * maxQ))
+        else: #terminal state
+            update = reward
+        y[0][action] = update #only change the corresponding action value
+        
+        print("Game #: %s" % (epoch_num,))
+        hist = self.model.fit(state.reshape(1, self.inputSize), 
+            y, batch_size=1, nb_epoch=1, verbose=1)
+        clear_output(wait=True)
+
+        return hist.history['loss'][0]
+   
 
     def train(self, epoch_num):
         '''
         sample buffer and train the model
         '''
-        minibatch = random.sample(self.replay, self.batchSize)
-        X_train = []
-        y_train = []
-        for memory in minibatch:
-            old_state, action, reward, new_state = memory
-            old_qval = self.model.predict(old_state.reshape(1,self.inputSize), batch_size=1)
-            newQ = self.model.predict(new_state.reshape(1,self.inputSize), batch_size=1)
-            maxQ = np.max(newQ)
-            y = np.zeros((1,4))
-            y[:] = old_qval[:]
-            if reward == -1: #non-terminal state
-                update = (reward + (self.gamma * maxQ))
-            else: #terminal state
-                update = reward
-            y[0][action] = update #only change the corresponding action value
-            X_train.append(old_state.reshape(self.inputSize,))
-            y_train.append(y.reshape(4,))
+        if self.randAll or self.randPlayer:
+            minibatch = random.sample(self.replay, self.batchSize)
+            X_train = []
+            y_train = []
+            for memory in minibatch:
+                old_state, action, reward, new_state = memory
+                old_qval = self.model.predict(old_state.reshape(1,self.inputSize), batch_size=1)
+                newQ = self.model.predict(new_state.reshape(1,self.inputSize), batch_size=1)
+                maxQ = np.max(newQ)
+                y = np.zeros((1,4))
+                y[:] = old_qval[:]
+                if reward == -1: #non-terminal state
+                    update = (reward + (self.gamma * maxQ))
+                else: #terminal state
+                    update = reward
+                y[0][action] = update #only change the corresponding action value
+                X_train.append(old_state.reshape(self.inputSize,))
+                y_train.append(y.reshape(4,))
 
-        X_train = np.array(X_train)
-        y_train = np.array(y_train)
-        print("Game #: %s" % (epoch_num,))
-        hist = self.model.fit(X_train, y_train, batch_size=self.batchSize, 
-            nb_epoch=1, verbose=1)
-        clear_output(wait=True)
+            X_train = np.array(X_train)
+            y_train = np.array(y_train)
+            print("Game #: %s" % (epoch_num,))
+            hist = self.model.fit(X_train, y_train, batch_size=self.batchSize, 
+                nb_epoch=1, verbose=1)
+            clear_output(wait=True)
 
         return hist.history['loss'][0]
     
@@ -197,8 +219,9 @@ class dqnt(object):
         define the main logic and record results
         '''
         #fill the buffer
-        while (len(self.replay) <= self.bufferSize):
-            self.replay.append(self.step())
+        if self.randAll or self.randPlayer:
+            while (len(self.replay) <= self.bufferSize):
+                self.replay.append(self.step())
         
         #start the training
         for i in range(self.epochs):
@@ -207,10 +230,14 @@ class dqnt(object):
             self.trainStep=0
             
             for _ in range(self.steps):
-                self.step()
-                loss = self.train(i)
+                load = self.step()
+                if self.randPlayer or self.randAll:
+                    self.replay[self.h % self.bufferSize] = load
+                    loss = self.train(i)
+                else:
+                    loss=self.trainDeter(load, i)
+                
                 lossPerEpoch.append(loss)
-                self.replay[self.h % self.bufferSize] = self.step()
             
             
             avga = self.test()
@@ -225,12 +252,11 @@ class dqnt(object):
         'timeList':self.timeList, 'lossList':self.lossList, 'solved':False}
             
             if self.clock is not None and self.timeList[-1] >= self.clock:
-                dic['solved']=avga>=1
                 self.saveModel()
                 return dic
 
             if avga >= self.fitThreshold and self.fitThreshold is not None:
-                dic['solved']=avga>=1
+                dic['solved']=True
                 self.saveModel()
                 return dic
 
