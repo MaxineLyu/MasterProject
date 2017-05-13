@@ -50,9 +50,6 @@ if __name__ == "__main__":
 	randResult = []
 	nonRandResult =[]
 	
-	n=5
-
-	
 	exp_id=0
 	for g in maps:
 		exp_id+=1
