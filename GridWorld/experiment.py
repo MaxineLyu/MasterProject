@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
 			saveResults(info)
 		
-		generation *= 1.03
+		generation *= 1.06
 		generation = int(generation)
 	
 	exp_id=0
