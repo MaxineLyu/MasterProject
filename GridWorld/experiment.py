@@ -60,9 +60,9 @@ if __name__ == "__main__":
 			st = setST(exp_id)
 
 			NEATresult = runNEAT.run(g, trails = test_step, randPlayer = randPlayer, generation = generation, 
-				population = population, nwin = None)
+				population = population, nwin = 1)
 			runDQN = dqnt(g, randPlayer = randPlayer, test_num=test_step, epochs = generation, 
-				steps= population, fitThreshold = None, stepThreshold = st)
+				steps= population, fitThreshold = 1, stepThreshold = st)
 			DQNresult = runDQN.run()
 			NEATresult['exp_id'] = info
 			DQNresult['exp_id'] = info
@@ -80,9 +80,9 @@ if __name__ == "__main__":
 
 			randPlayer=True
 			HPresult = runHP.run(g, 'nhn', 'triup-down', randPlayer = randPlayer, trails = test_step, generation = generation, 
-				population = population, nwin=None)
+				population = population, nwin=1)
 			runDQN = dqnt(g, randPlayer = randPlayer, test_num=test_step, epochs = generation, 
-				steps= population, fitThreshold = None, stepThreshold = 10)
+				steps= population, fitThreshold = 1, stepThreshold = 10)
 			DQNresult = runDQN.run()
 			HPresult['exp_id'] = info
 			DQNresult['exp_id'] = info
