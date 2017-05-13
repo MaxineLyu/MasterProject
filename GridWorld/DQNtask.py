@@ -225,11 +225,12 @@ class dqnt(object):
         'timeList':self.timeList, 'lossList':self.lossList, 'solved':False}
             
             if self.clock is not None and self.timeList[-1] >= self.clock:
+                dic['solved']=avga>=1
                 self.saveModel()
                 return dic
 
             if avga >= self.fitThreshold and self.fitThreshold is not None:
-                dic['solved']=True
+                dic['solved']=avga>=1
                 self.saveModel()
                 return dic
 
