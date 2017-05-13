@@ -40,7 +40,7 @@ def saveResults(info):
  	f.close()
 
 if __name__ == "__main__":
-	generation = 1000
+	generation = 100
 	population = 200
 	test_step = 100
 	epoch = generation
@@ -55,8 +55,9 @@ if __name__ == "__main__":
 	
 	exp_id=0
 	for g in maps:
-		for i in range(1):
-			exp_id+=1
+		exp_id+=1
+		generation *= 1.03
+		for i in range(3):
 			st = setST(exp_id)
 			info = id2info(exp_id)+"_randPlayer_"+str(i+1)+"th_try"
 
@@ -72,9 +73,11 @@ if __name__ == "__main__":
 
 			saveResults(info)
 	
+	exp_id=0
+	generation = 100
 	for g in maps:
+		exp_id+=1
 		for i in range(1):
-			exp_id+=1
 			randPlayer = False
 			info = id2info(exp_id)+"_deterministic_"+str(i+1)+"th_try"
 			st = setST(exp_id)
