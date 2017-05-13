@@ -53,7 +53,7 @@ if __name__ == "__main__":
 	n=5
 
 	for g in maps:
-		for i in range(n):
+		for i in range(1):
 			exp_id+=1
 			randPlayer = False
 			info = id2info(exp_id)+"_deterministic_"+str(i+1)+"th_try"
@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
 	exp_id=0
 	for g in maps:
-		for i in range(n):
+		for i in range(1):
 			exp_id+=1
 			st = setST(exp_id)
 			info = id2info(exp_id)+"_randPlayer_"+str(i+1)+"th_try"
