@@ -53,8 +53,6 @@ if __name__ == "__main__":
 	exp_id=0
 	for g in maps:
 		exp_id+=1
-		generation *= 1.03
-		generation = round(generation)
 		for i in range(3):
 			st = setST(exp_id)
 			info = id2info(exp_id)+"_randPlayer_"+str(i+1)+"th_try"
@@ -70,6 +68,9 @@ if __name__ == "__main__":
 			randResult.append((HPresult, DQNresult))
 
 			saveResults(info)
+		
+		generation *= 1.03
+		generation = int(generation)
 	
 	exp_id=0
 	generation = 100
