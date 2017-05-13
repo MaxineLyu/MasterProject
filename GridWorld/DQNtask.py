@@ -135,7 +135,10 @@ class dqnt(object):
         '''
         self.h+=1
         self.trainStep+=1
-        if self.tempGame.over or self.trainStep>=self.stepThreshold: #restart the game if over
+        st=self.stepThreshold
+        if not (self.randAll or self.randPlayer):
+            st *=5
+        if self.tempGame.over or self.trainStep>=st: #restart the game if over
             self.tempGame = self._initGame()
             self.trainStep=0
         state = self.tempGame.getState()
