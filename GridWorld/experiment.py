@@ -41,8 +41,7 @@ def saveResults(info):
 
 if __name__ == "__main__":
 	generation = 50
-	population = 200
-	test_step = 100
+	population = 100
 	epoch = generation
 	step = population
 	exp_id=0
@@ -51,17 +50,20 @@ if __name__ == "__main__":
 	nonRandResult =[]
 	
 	exp_id=0
-	for g in maps:
+	for g in maps[exp_id:]:
 		exp_id+=1
+		test_step = g.h * g.w - (g.h + g.w)
+		if test_step < 10:
+			test_step = 10
 		for i in range(1):
 			st = setST(exp_id)
 			info = id2info(exp_id)+"_randPlayer_"+str(i+1)+"th_try"
 
 			randPlayer=True
 			HPresult = runHP.run(g, 'nhn', 'triup-down', randPlayer = randPlayer, trails = test_step, generation = generation, 
-				population = population, nwin=1)
+				population = population, nwin=0.99)
 			runDQN = dqnt(g, randPlayer = randPlayer, test_num=test_step, epochs = generation, 
-				steps= population, fitThreshold = 1, stepThreshold = 10)
+				steps= population, fitThreshold = 0.99, stepThreshold = st)
 			DQNresult = runDQN.run()
 			HPresult['exp_id'] = info
 			DQNresult['exp_id'] = info
@@ -74,7 +76,7 @@ if __name__ == "__main__":
 	
 	exp_id=0
 	generation = 50
-	for g in maps:
+	for g in maps[exp_id:]:
 		exp_id+=1
 		for i in range(1):
 			randPlayer = False
@@ -82,9 +84,9 @@ if __name__ == "__main__":
 			st = setST(exp_id)
 
 			NEATresult = runNEAT.run(g, trails = test_step, randPlayer = randPlayer, generation = generation, 
-				population = population, nwin = 1)
+				population = population, nwin = 0.99)
 			runDQN = dqnt(g, randPlayer = randPlayer, test_num=test_step, epochs = generation, 
-				steps= population, fitThreshold = 1, stepThreshold = st)
+				steps= population, fitThreshold = 0.99, stepThreshold = st)
 			DQNresult = runDQN.run()
 			NEATresult['exp_id'] = info
 			DQNresult['exp_id'] = info
