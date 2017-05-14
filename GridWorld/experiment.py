@@ -78,7 +78,6 @@ if __name__ == "__main__":
 		generation = int(generation)
 	
 	exp_id=0
-	generation = 50
 	for g in maps[exp_id:]:
 		exp_id+=1
 		for i in range(1):
