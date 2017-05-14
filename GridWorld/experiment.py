@@ -26,6 +26,9 @@ def id2info(id):
 	return "size"+str(size)+"-g"+str(num)
 
 def setST(exp_id):
+	'''
+	test step threshold -- terminate after step_threshold number of steps.
+	'''
 	if exp_id < 16 or exp_id in [18, 21, 24, 27]:
 		st = g.h + g.w +10
 	elif exp_id in [16, 19, 22, 25]:
