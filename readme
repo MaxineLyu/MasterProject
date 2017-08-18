@@ -1,1 +1,1 @@
-GridWorld contains code that was written to compare the performance of DQN and HyperNEAT.
+GridWorld contains the game environment that was written to compare the performance of DQN and HyperNEAT.
