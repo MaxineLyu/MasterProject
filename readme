@@ -1,1 +1,2 @@
-GridWorld contains the game environment that was written to compare the performance of DQN and HyperNEAT.
+GridWorld folder contains the coding for the game environment that was dedicated to compare the performance of DQN and HyperNEAT.
+
